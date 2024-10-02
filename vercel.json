@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "dist/finzly-gps-frontend/**",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/dist/finzly-gps-frontend/index.html"
+      }
+    ]
+  }

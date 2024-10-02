@@ -1,0 +1,47 @@
+<div class="transaction-history-container">
+  <h3>Transaction History</h3>
+
+  <div class="search-form">
+    <input [(ngModel)]="phoneNumber" name="phoneNumber" type="text" placeholder="Enter Phone Number" required>
+    <!-- <button (click)="loadTransactions()">Search Transactions</button> -->
+    <button (click)="loadTransactions()" [disabled]="isLoading">
+      {{ isLoading ? 'Loading...' : 'Search' }}
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    Loading transactions...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+  <div class="transaction-list" *ngIf="!isLoading && !error && transactions.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Connection ID</th>
+          <th>Amount</th>
+          <th>Payment Method</th>
+          <th>Status</th>
+          <th>Reference Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactions">
+          <td>{{ transaction.transactionDate | date:'short' }}</td>
+          <td>{{ transaction.consumerId }}</td>
+          <td>{{ transaction.amount | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>{{ transaction.modeOfPayment }}</td>
+          <td>{{ transaction.status }}</td>
+          <td>{{ transaction.referenceNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isLoading && !error && transactions.length === 0" class="no-transactions">
+    No transactions found for this phone number.
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="payment-processing-container">
+  <h2>Payment Processing</h2>
+  
+  <div class="search-form">
+    <input [(ngModel)]="phoneNumber" placeholder="Enter Phone Number">
+    <button (click)="fetchConnectionIds()">Fetch Connection IDs</button>
+  </div>
+
+  <div class="connection-list" *ngIf="connectionIds.length > 0">
+    <h3>Select a Connection ID:</h3>
+    <div *ngFor="let id of connectionIds">
+      <input type="radio" [value]="id" [(ngModel)]="selectedConnectionId" (change)="onConnectionIdChange()">
+      <label>{{ id }}</label>
+    </div>
+  </div>
+
+  <div class="invoice-list" *ngIf="invoices.length > 0">
+    <h3>Unpaid Invoices</h3>
+    <ul>
+      <li *ngFor="let invoice of invoices" (click)="selectInvoice(invoice)" [class.selected]="selectedInvoice === invoice">
+        Invoice #{{ invoice.invoiceId }} - Due: {{ invoice.amountDue | currency:'INR':'symbol':'1.2-2' }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="payment-form" *ngIf="selectedInvoice">
+    <h3>Process Payment</h3>
+    <p>Selected Invoice: #{{ selectedInvoice.invoiceId }}</p>
+    <p>Amount Due: {{ selectedInvoice.amountDue | currency:'INR':'symbol':'1.2-2' }}</p>
+    <input [(ngModel)]="paymentAmount" type="number" placeholder="Payment Amount">
+    <select [(ngModel)]="paymentMethod">
+      <option value="CREDIT_CARD">Credit Card</option>
+      <option value="DEBIT_CARD">Debit Card</option>
+      <option value="NET_BANKING">Net Banking</option>
+      <option value="UPI">UPI</option>
+      <option value="CASH">Cash</option>
+    </select>
+    <button (click)="processPayment()">Process Payment</button>
+  </div>
+
+  <div class="message" *ngIf="message">
+    {{ message }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Processing... Please wait.</p>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="invoice-generate-container">
+    <form [formGroup]="phoneForm" (ngSubmit)="fetchConnectionIds()">
+      <input formControlName="phoneNumber" placeholder="Enter Phone Number">
+      <button type="submit" [disabled]="phoneForm.invalid">Fetch Connection IDs</button>
+    </form>
+
+    <div *ngIf="connectionIds.length > 0">
+      <h3>Select a Connection ID:</h3>
+      <form [formGroup]="connectionForm">
+        <div *ngFor="let id of connectionIds">
+          <input type="radio" [value]="id" formControlName="selectedConnectionId">
+          <label>{{ id }}</label>
+        </div>
+      </form>
+    </div>
+
+    <form *ngIf="showDateForm" [formGroup]="dateForm" (ngSubmit)="generateInvoice()">
+      <input type="date" formControlName="startDate">
+      <input type="date" formControlName="endDate">
+      <button type="submit" [disabled]="dateForm.invalid || !connectionForm.valid">Generate Invoice</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+</div>

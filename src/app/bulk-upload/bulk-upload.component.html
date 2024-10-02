@@ -1,0 +1,27 @@
+<!-- <h3>Bulk Customer Upload</h3> -->
+<div class="upload-controls">
+  <input type="file" (change)="onFileSelected($event)" accept=".csv" id="file-input" class="file-input">
+  <button (click)="onUpload()" [disabled]="!selectedFile" class="upload-btn">Upload</button>
+</div>
+<p *ngIf="selectedFile">Selected file: {{ selectedFile.name }}</p>
+<div *ngIf="uploadProgress > 0">Upload Progress: {{uploadProgress}}%</div>
+<div *ngIf="storedRecords > 0">
+  Storing Progress: {{ storedRecords }} / {{ totalRecords }} records
+  ({{ storedPercentage.toFixed(2) }}%)
+</div>
+<div *ngIf="storedRecords < totalRecords && storedRecords > 0">
+  Warning: Not all records were stored. Please check the error messages or contact the administrator.
+</div>
+<button *ngIf="showRetry" (click)="retry()">Retry Upload</button>
+<app-error-popup *ngIf="showErrorPopup" [errors]="errors" (close)="closeErrorPopup()"></app-error-popup>
+
+<div class="upload-summary" *ngIf="uploadSummary">
+  <h3>Upload Summary</h3>
+  <p>Total Records: {{ uploadSummary.totalRecords }}</p>
+  <p>Successful Uploads: {{ uploadSummary.successfulUploads }}</p>
+  <p>Failed Uploads: {{ uploadSummary.failedUploads }}</p>
+</div>
+<div class="success-message" *ngIf="message">{{ message }}</div>
+<div *ngIf="isLoading" class="loading-indicator">
+  <p>Uploading... Please wait.</p>
+</div>

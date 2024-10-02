@@ -1,0 +1,111 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h2>Dashboard</h2>
+    <div class="header-right">
+      <span class="employee-name">{{ employeeName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+    
+  <div class="content" #contentContainer>
+    <div class="card">
+      <h3>Customer Data Upload</h3>
+      <div class="card-content">
+        <button class="manual-upload-btn" (click)="openCustomerForm()">Manual Upload</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Bulk Customer Upload</h3>
+      <div class="card-content">
+        <app-bulk-upload></app-bulk-upload>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Invoice Generation</h3>
+      <div class="card-content">
+        <app-invoice-generate></app-invoice-generate>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Payment Transaction Tracking</h3>
+      <div class="card-content">
+        <app-payment-transcation-tracking></app-payment-transcation-tracking>
+        <button class="view-transaction-btn" (click)="navigateToPaymentProcessing()">Pay Dues</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showCustomerForm" class="modal">
+    <div class="modal-content">
+      <h3>Add New Customer</h3>
+      <form (ngSubmit)="addCustomer()">
+        <div class="form-group">
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.name" name="name" placeholder="Name" required>
+            <div *ngIf="validationErrors['name']" class="error-message">{{ validationErrors['name'] }}</div>
+          </div>
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.email" name="email" type="email" placeholder="Email" required>
+            <div *ngIf="validationErrors['email']" class="error-message">{{ validationErrors['email'] }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+            <div *ngIf="validationErrors['phoneNumber']" class="error-message">{{ validationErrors['phoneNumber'] }}</div>
+          </div>
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.billingAddress" name="billingAddress" placeholder="Billing Address" required>
+            <div *ngIf="validationErrors['billingAddress']" class="error-message">{{ validationErrors['billingAddress'] }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.connectionId" name="connectionId" placeholder="Connection ID" required>
+            <div *ngIf="validationErrors['connectionId']" class="error-message">{{ validationErrors['connectionId'] }}</div>
+          </div>
+          <div class="input-container">
+            <input [(ngModel)]="newCustomer.unitConsumption" name="unitConsumption" type="number" placeholder="Unit Consumption" required>
+            <div *ngIf="validationErrors['unitConsumption']" class="error-message">{{ validationErrors['unitConsumption'] }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-container">
+            <label for="billingStartDate">Billing Start Date</label>
+            <input id="billingStartDate" [(ngModel)]="newCustomer.billingStartDate" name="billingStartDate" type="date" placeholder="Billing Start Date" required>
+            <div *ngIf="validationErrors['billingStartDate']" class="error-message">{{ validationErrors['billingStartDate'] }}</div>
+          </div>
+          <div class="input-container">
+            <label for="billingEndDate">Billing End Date</label>
+            <input id="billingEndDate" [(ngModel)]="newCustomer.billingEndDate" name="billingEndDate" type="date" placeholder="Billing End Date" required>
+            <div *ngIf="validationErrors['billingEndDate']" class="error-message">{{ validationErrors['billingEndDate'] }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-container">
+            <label for="billDueDate">Bill Due Date</label>
+            <input id="billDueDate" [(ngModel)]="newCustomer.billDueDate" name="billDueDate" type="date" placeholder="Bill Due Date" required>
+            <div *ngIf="validationErrors['billDueDate']" class="error-message">{{ validationErrors['billDueDate'] }}</div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit">Add Customer</button>
+          <button type="button" (click)="closeCustomerForm()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Processing... Please wait.</p>
+  </div>
+
+  <div *ngIf="errorPopupMessage" class="error-popup">
+    <p>{{ errorPopupMessage }}</p>
+    <button (click)="errorPopupMessage = ''">Close</button>
+  </div>
+
+  </div>

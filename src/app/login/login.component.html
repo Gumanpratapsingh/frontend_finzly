@@ -1,0 +1,29 @@
+<div class="login-container">
+  <div class="login-box">
+    <h2>Welcome Back</h2>
+    <!-- <p *ngIf="!isNewUser">Don't have an account yet? Contact Your Administrator</p>
+    <p *ngIf="isNewUser">Enter the OTP sent to your email</p> -->
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Email address" required>
+      </div>
+      <div class="input-group" *ngIf="isNewUser">
+        <input type="text" id="otp" [(ngModel)]="otp" name="otp" placeholder="Enter OTP" required>
+      </div>
+      <button type="submit" class="login-button">
+        {{ isNewUser ? 'Verify OTP' : 'Login' }}
+      </button>
+    </form>
+
+    <p class="message">{{ message }}</p>
+
+    <div class="contact-admin">
+      <p>Need help? Contact Your Administrator</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-indicator">
+      <p>Logging in... Please wait.</p>
+    </div>
+  </div>
+</div>
