@@ -29,7 +29,7 @@ export class LoginComponent {
 
   login() {
     this.isLoading = true;
-    this.http.post<any>('http://localhost:8080/api/auth/login', { email: this.email })
+    this.http.post<any>('https://frontendfinzly-production.up.railway.app/api/auth/login', { email: this.email })
       .subscribe(
         response => {
           this.isLoading = false;
@@ -59,7 +59,7 @@ export class LoginComponent {
 
   verifyOtp() {
     this.isLoading = true;
-    this.http.post<any>(`http://localhost:8080/api/auth/verify-otp`, { email: this.email, otp: this.otp })
+    this.http.post<any>(`https://frontendfinzly-production.up.railway.app/api/auth/verify-otp`, { email: this.email, otp: this.otp })
       .subscribe(
         response => {
           this.isLoading = false;

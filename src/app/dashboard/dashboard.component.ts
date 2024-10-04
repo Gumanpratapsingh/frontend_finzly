@@ -20,7 +20,6 @@ export class DashboardComponent implements OnInit {
   
   customers: any[] = [];
   newCustomer: any = {
-    // ... existing properties
   };
   employeeName: string = '';
   showCustomerForm: boolean = false;
@@ -77,15 +76,6 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    // Validate connectionId is a number
-    if (isNaN(Number(this.newCustomer.connectionId))) {
-      this.validationErrors['connectionId'] = 'Connection ID must be a number';
-      return;
-    }
-
-    // Add CUST prefix to connectionId
-    this.newCustomer.connectionId = 'CUST' + this.newCustomer.connectionId;
-
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found');
@@ -94,9 +84,9 @@ export class DashboardComponent implements OnInit {
 
     console.log('Sending customer data:', this.newCustomer);
 
-    this.isLoading = true;
+    this.isLoading = true; // Set loading state to true
 
-    this.http.post('http://localhost:8080/api/customers', this.newCustomer, {
+    this.http.post('https://frontendfinzly-production.up.railway.app/api/customers', this.newCustomer, {
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -112,7 +102,7 @@ export class DashboardComponent implements OnInit {
           this.customers.push(response);
         }
         this.closeCustomerForm();
-        this.isLoading = false;
+        this.isLoading = false; // Set loading state to false
       },
       error => {
         console.error('Error adding/updating customer:', error);
@@ -127,7 +117,7 @@ export class DashboardComponent implements OnInit {
         } else {
           this.errorPopupMessage = 'Something went wrong while processing the customer. Please double-check your information and try again.';
         }
-        this.isLoading = false;
+        this.isLoading = false; // Ensure isLoading is set to false in case of an error
       }
     );
   }
@@ -140,16 +130,12 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/transaction-history']);
   }
 
-  navigateToInvoiceGeneration() {
-    this.router.navigate(['/invoice-generate']);
-  }
-
   @ViewChild('contentContainer') contentContainer!: ElementRef;
 
   logout() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.http.post('http://localhost:8080/api/auth/logout', {}, {
+      this.http.post('https://frontendfinzly-production.up.railway.app/api/auth/logout', {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe(
         () => {
