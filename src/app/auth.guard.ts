@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
       return new Observable(observer => observer.next(false));
     }
 
-    return this.http.get<boolean>('http://localhost:8080/api/auth/validate-token', {
+    return this.http.get<boolean>('https://finzlyapp-production.up.railway.app/api/auth/validate-token', {
       headers: { 'Authorization': `Bearer ${token}` }
     }).pipe(
       map((response: any) => {

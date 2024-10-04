@@ -18,6 +18,7 @@ export class InvoiceGenerateComponent {
   showDateForm = false;
   errorMessage: string = '';
   showPhoneForm = true;  // Add this line
+  isGeneratingInvoice: boolean = false;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.phoneForm = this.fb.group({
@@ -34,7 +35,7 @@ export class InvoiceGenerateComponent {
 
   fetchConnectionIds() {
     if (this.phoneForm.valid) {
-      this.http.get<string[]>(`http://localhost:8080/api/customers/connection-ids/${this.phoneForm.value.phoneNumber}`)
+      this.http.get<string[]>(`https://finzlyapp-production.up.railway.app/api/customers/connection-ids/${this.phoneForm.value.phoneNumber}`)
         .subscribe(
           (ids) => {
             this.connectionIds = ids;
@@ -60,10 +61,11 @@ export class InvoiceGenerateComponent {
 
   generateInvoice() {
     if (this.dateForm.valid && this.connectionForm.valid) {
+      this.isGeneratingInvoice = true;
       const { startDate, endDate } = this.dateForm.value;
       const phoneNumber = this.phoneForm.value.phoneNumber;
       const connectionId = this.connectionForm.value.selectedConnectionId;
-      const url = `http://localhost:8080/api/invoices/generate?phoneNumber=${phoneNumber}&connectionId=${connectionId}&startDate=${startDate}&endDate=${endDate}`;
+      const url = `https://finzlyapp-production.up.railway.app/api/invoices/generate?phoneNumber=${phoneNumber}&connectionId=${connectionId}&startDate=${startDate}&endDate=${endDate}`;
       
       this.http.post(url, {}, { responseType: 'blob' })
         .subscribe(
@@ -72,6 +74,7 @@ export class InvoiceGenerateComponent {
             const url = window.URL.createObjectURL(blob);
             window.open(url, '_blank');
             this.errorMessage = '';
+            this.isGeneratingInvoice = false;
           },
           (error: HttpErrorResponse) => {
             console.error('Error generating invoice:', error);
@@ -82,6 +85,7 @@ export class InvoiceGenerateComponent {
             } else {
               this.errorMessage = error.error || 'Failed to generate invoice. Please try again.';
             }
+            this.isGeneratingInvoice = false;
           }
         );
     }
