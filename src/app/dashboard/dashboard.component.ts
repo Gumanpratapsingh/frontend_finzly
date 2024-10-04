@@ -157,4 +157,8 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('employeeName');
     this.router.navigate(['/login']);
   }
+
+  navigateToInvoiceGeneration() {
+    this.router.navigate(['/invoice-generate']);
+  }
 }
