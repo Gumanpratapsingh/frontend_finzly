@@ -1,7 +1,8 @@
 <div class="invoice-generate-container">
+    <h2>Invoice Generation</h2>
     <form [formGroup]="phoneForm" (ngSubmit)="fetchConnectionIds()">
       <input formControlName="phoneNumber" placeholder="Enter Phone Number">
-      <button type="submit" [disabled]="phoneForm.invalid">Fetch Connection IDs</button>
+      <button type="submit" [disabled]="phoneForm.invalid" *ngIf="!connectionIds.length">Fetch Connection IDs</button>
     </form>
 
     <div *ngIf="connectionIds.length > 0">

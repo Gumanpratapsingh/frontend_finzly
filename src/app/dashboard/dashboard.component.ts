@@ -77,6 +77,15 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
+    // Validate connectionId is a number
+    if (isNaN(Number(this.newCustomer.connectionId))) {
+      this.validationErrors['connectionId'] = 'Connection ID must be a number';
+      return;
+    }
+
+    // Add CUST prefix to connectionId
+    this.newCustomer.connectionId = 'CUST' + this.newCustomer.connectionId;
+
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found');
@@ -85,9 +94,9 @@ export class DashboardComponent implements OnInit {
 
     console.log('Sending customer data:', this.newCustomer);
 
-    this.isLoading = true; // Set loading state to true
+    this.isLoading = true;
 
-    this.http.post('https://finzlyapp-production.up.railway.app/api/customers', this.newCustomer, {
+    this.http.post('http://localhost:8080/api/customers', this.newCustomer, {
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -103,7 +112,7 @@ export class DashboardComponent implements OnInit {
           this.customers.push(response);
         }
         this.closeCustomerForm();
-        this.isLoading = false; // Set loading state to false
+        this.isLoading = false;
       },
       error => {
         console.error('Error adding/updating customer:', error);
@@ -118,7 +127,7 @@ export class DashboardComponent implements OnInit {
         } else {
           this.errorPopupMessage = 'Something went wrong while processing the customer. Please double-check your information and try again.';
         }
-        this.isLoading = false; // Ensure isLoading is set to false in case of an error
+        this.isLoading = false;
       }
     );
   }
@@ -131,12 +140,16 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/transaction-history']);
   }
 
+  navigateToInvoiceGeneration() {
+    this.router.navigate(['/invoice-generate']);
+  }
+
   @ViewChild('contentContainer') contentContainer!: ElementRef;
 
   logout() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.http.post('https://finzlyapp-production.up.railway.app/api/auth/logout', {}, {
+      this.http.post('http://localhost:8080/api/auth/logout', {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe(
         () => {

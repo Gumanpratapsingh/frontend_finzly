@@ -33,22 +33,22 @@ h2 {
 .content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
     gap: 4rem;
     padding: 1rem;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
 }
 
 .card {
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 100%;
-    min-height: 100px;
+    height: auto;
+    min-height: 80px;
     overflow-y: auto;
 }
 
@@ -58,12 +58,14 @@ h2 {
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    padding: 0.5rem 0;
 }
 
 .card h3 {
     color: #007bff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     text-align: center;
+    font-size: 1rem;
 }
 
 button {
@@ -110,9 +112,12 @@ button:hover {
 .input-container {
     width: 48%;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
-.input-container input {
+.input-container input,
+.input-container .connection-id-input {
     width: 100%;
 }
 
@@ -167,20 +172,25 @@ input {
     margin-bottom: 1rem;
 }
 
-.manual-upload-btn {
+.manual-upload-btn,
+.view-transaction-btn,
+.generate-invoice-btn {
     width: 100%;
-    max-width: 300px;
+    max-width: 180px;
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
 
-.manual-upload-btn:hover {
+.manual-upload-btn:hover,
+.view-transaction-btn:hover,
+.generate-invoice-btn:hover {
     background-color: #0056b3;
 }
 
@@ -213,17 +223,21 @@ input {
 }
 
 .view-transaction-btn {
-    background-color: white; /* White background */
-    color: black; /* Black text */
-    border: 1px solid #d3d3d3; /* Light gray border */
-    padding: 10px 20px; /* Padding for spacing */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for background change */
+    width: 100%;
+    max-width: 200px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    margin-top: 1rem;
 }
 
 .view-transaction-btn:hover {
-    background-color: #f0f0f0; /* Light gray background on hover */
+    background-color: #0056b3;
 }
 
 .manual-upload-btn,
@@ -241,7 +255,6 @@ input {
     margin-top: 1rem;
 }
 
-.manual-upload-btn:hover,
 .view-transaction-btn:hover {
     background-color: #0056b3;
 }
@@ -295,4 +308,38 @@ input {
     border-radius: 5px;
     font-weight: bold;
     z-index: 10001;
+}
+
+.connection-id-input {
+    display: flex;
+    align-items: center;
+}
+
+.connection-id-input .prefix {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-right: none;
+}
+
+.connection-id-input input {
+    border-left: none;
+}
+
+.generate-invoice-btn {
+    width: 100%;
+    max-width: 200px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.generate-invoice-btn:hover {
+    background-color: #0056b3;
 }

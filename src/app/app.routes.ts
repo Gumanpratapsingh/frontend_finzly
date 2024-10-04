@@ -4,11 +4,13 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { PaymentProcessingComponent } from './payment-processing/payment-processing.component';
+import { InvoiceGenerateComponent } from './invoice-generate/invoice-generate.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'transaction-history', component: TransactionHistoryComponent },
-    { path: 'payment-processing', component: PaymentProcessingComponent, canActivate: [AuthGuard] }
+    { path: 'payment-processing', component: PaymentProcessingComponent, canActivate: [AuthGuard] },
+    { path: 'invoice-generate', component: InvoiceGenerateComponent, canActivate: [AuthGuard] }
 ];

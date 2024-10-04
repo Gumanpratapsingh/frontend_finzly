@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 interface Transaction {
   transactionId: number;
@@ -27,7 +28,7 @@ export class TransactionHistoryComponent implements OnInit {
   isLoading: boolean = false;
   error: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private location: Location) {}
 
   ngOnInit() {}
 
@@ -36,7 +37,7 @@ export class TransactionHistoryComponent implements OnInit {
     this.error = null;
     this.transactions = [];
 
-    this.http.get<Transaction[]>(`https://finzlyapp-production.up.railway.app/api/transactions/history/${this.phoneNumber}`)
+    this.http.get<Transaction[]>(`http://localhost:8080/api/transactions/history/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.transactions = data;
@@ -48,5 +49,9 @@ export class TransactionHistoryComponent implements OnInit {
           this.isLoading = false;
         }
       );
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

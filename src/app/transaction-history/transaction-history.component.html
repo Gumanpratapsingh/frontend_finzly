@@ -1,9 +1,8 @@
 <div class="transaction-history-container">
-  <h3>Transaction History</h3>
+  <h2>Transaction History</h2>
 
   <div class="search-form">
     <input [(ngModel)]="phoneNumber" name="phoneNumber" type="text" placeholder="Enter Phone Number" required>
-    <!-- <button (click)="loadTransactions()">Search Transactions</button> -->
     <button (click)="loadTransactions()" [disabled]="isLoading">
       {{ isLoading ? 'Loading...' : 'Search' }}
     </button>
@@ -16,6 +15,7 @@
   <div *ngIf="error" class="error">
     {{ error }}
   </div>
+
   <div class="transaction-list" *ngIf="!isLoading && !error && transactions.length > 0">
     <table>
       <thead>
@@ -44,4 +44,6 @@
   <div *ngIf="!isLoading && !error && transactions.length === 0" class="no-transactions">
     No transactions found for this phone number.
   </div>
+  <br>
+  <button class="back-button" (click)="goBack()">Back to Dashboard</button>
 </div>

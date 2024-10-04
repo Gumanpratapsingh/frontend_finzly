@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { timer } from 'rxjs';
 
 interface Invoice {
   invoiceId: number;
@@ -32,6 +33,8 @@ export class PaymentProcessingComponent implements OnInit {
   paymentMethod: 'CREDIT_CARD' | 'DEBIT_CARD' | 'NET_BANKING' | 'UPI' | 'CASH' | 'WALLET' = 'CREDIT_CARD';
   message: string = '';
   isLoading: boolean = false;
+  showSuccessMessage: boolean = false;
+  successMessage: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -43,7 +46,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<string[]>(`https://finzlyapp-production.up.railway.app/api/customers/connection-ids/${this.phoneNumber}`)
+    this.http.get<string[]>(`http://localhost:8080/api/customers/connection-ids/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.connectionIds = data;
@@ -71,7 +74,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;
@@ -113,25 +116,23 @@ export class PaymentProcessingComponent implements OnInit {
     const paymentData = {
       invoiceId: this.selectedInvoice.invoiceId,
       amount: this.paymentAmount,
-      paymentMethod: this.paymentMethod
+      paymentMethod: this.paymentMethod,
+      connectionId: this.selectedConnectionId
     };
 
     this.isLoading = true;
-    this.http.post<{ message: string, updatedInvoice: Invoice }>('https://finzlyapp-production.up.railway.app/api/payments/process', paymentData)
+    this.http.post<{ message: string, updatedInvoice: Invoice }>('http://localhost:8080/api/payments/process', paymentData)
       .subscribe(
         (response) => {
-          this.message = response.message;
-          const index = this.invoices.findIndex(inv => inv.invoiceId === response.updatedInvoice.invoiceId);
-          if (index !== -1) {
-            this.invoices[index] = response.updatedInvoice;
-          }
-          if (response.updatedInvoice.status === 'PAID') {
-            this.invoices = this.invoices.filter(inv => inv.invoiceId !== response.updatedInvoice.invoiceId);
-          }
-          this.selectedInvoice = null;
-          this.paymentAmount = 0;
-          this.fetchInvoices();
+          this.showSuccessMessage = true;
+          this.successMessage = `Payment of ${this.paymentAmount} processed successfully!`;
           this.isLoading = false;
+          
+          // Set a timer to hide the success message and refresh invoices after 10 seconds
+          timer(5000).subscribe(() => {
+            this.showSuccessMessage = false;
+            this.fetchInvoices();
+          });
         },
         (error) => {
           console.error('Error processing payment:', error);
@@ -140,6 +141,29 @@ export class PaymentProcessingComponent implements OnInit {
           } else {
             this.message = 'Error processing payment. Please try again.';
           }
+          this.isLoading = false;
+        }
+      );
+  }
+
+  fetchUnpaidInvoices() {
+    if (!this.selectedConnectionId) {
+      this.message = 'Please select a connection ID.';
+      return;
+    }
+    this.isLoading = true;
+    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
+      .subscribe(
+        (data) => {
+          this.invoices = data;
+          this.selectedInvoice = null;
+          this.paymentAmount = 0;
+          this.message = data.length === 0 ? 'No unpaid invoices found for this connection ID.' : '';
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error fetching unpaid invoices:', error);
+          this.message = 'Error fetching invoices. Please try again.';
           this.isLoading = false;
         }
       );

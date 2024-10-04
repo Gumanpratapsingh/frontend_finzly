@@ -25,3 +25,18 @@
 <div *ngIf="isLoading" class="loading-indicator">
   <p>Uploading... Please wait.</p>
 </div>
+<div *ngIf="showSummaryPopup && uploadSummary" class="summary-popup">
+  <div class="summary-content">
+    <h3>Upload Summary</h3>
+    <p>Total Records: {{ uploadSummary.totalRecords }}</p>
+    <p>Successful Uploads: {{ uploadSummary.successfulUploads }}</p>
+    <p>Failed Uploads: {{ uploadSummary.failedUploads }}</p>
+    <div *ngIf="uploadSummary.errors && uploadSummary.errors.length > 0">
+      <h4>Errors:</h4>
+      <ul>
+        <li *ngFor="let error of uploadSummary.errors">{{ error }}</li>
+      </ul>
+    </div>
+    <button (click)="closeSummaryPopup()">Close</button>
+  </div>
+</div>

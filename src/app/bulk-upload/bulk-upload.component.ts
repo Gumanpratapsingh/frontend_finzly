@@ -29,6 +29,7 @@ export class BulkUploadComponent {
   storedPercentage: number = 0;
   message: string = '';
   isLoading: boolean = false;
+  showSummaryPopup: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -66,7 +67,7 @@ export class BulkUploadComponent {
 
     this.isLoading = true; // Show loading indicator
 
-    this.http.post('https://finzlyapp-production.up.railway.app/api/bulk-upload/customers', formData, {
+    this.http.post('http://localhost:8080/api/bulk-upload/customers', formData, {
       headers: { 'Authorization': `Bearer ${token}` },
       reportProgress: true,
       observe: 'events'
@@ -91,6 +92,8 @@ export class BulkUploadComponent {
           } else {
             this.showSuccessMessage();
           }
+
+          this.showUploadSummary();
         }
       },
       (error) => {
@@ -135,5 +138,15 @@ export class BulkUploadComponent {
   retry() {
     this.resetState();
     this.uploadFile();
+  }
+
+  showUploadSummary() {
+    if (this.uploadSummary) {
+      this.showSummaryPopup = true;
+    }
+  }
+
+  closeSummaryPopup() {
+    this.showSummaryPopup = false;
   }
 }
