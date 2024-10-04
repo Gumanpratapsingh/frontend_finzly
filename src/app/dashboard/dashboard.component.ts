@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit {
 
     this.isLoading = true; // Set loading state to true
 
-    this.http.post('https://finzlyapp-production.up.railway.app//api/customers', this.newCustomer, {
+    this.http.post('https://finzlyapp-production.up.railway.app/api/customers', this.newCustomer, {
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit {
   logout() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.http.post('https://finzlyapp-production.up.railway.app//api/auth/logout', {}, {
+      this.http.post('https://finzlyapp-production.up.railway.app/api/auth/logout', {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe(
         () => {

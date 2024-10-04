@@ -34,7 +34,7 @@ export class InvoiceGenerateComponent {
 
   fetchConnectionIds() {
     if (this.phoneForm.valid) {
-      this.http.get<string[]>(`https://finzlyapp-production.up.railway.app//api/customers/connection-ids/${this.phoneForm.value.phoneNumber}`)
+      this.http.get<string[]>(`https://finzlyapp-production.up.railway.app/api/customers/connection-ids/${this.phoneForm.value.phoneNumber}`)
         .subscribe(
           (ids) => {
             this.connectionIds = ids;
@@ -63,7 +63,7 @@ export class InvoiceGenerateComponent {
       const { startDate, endDate } = this.dateForm.value;
       const phoneNumber = this.phoneForm.value.phoneNumber;
       const connectionId = this.connectionForm.value.selectedConnectionId;
-      const url = `https://finzlyapp-production.up.railway.app//api/invoices/generate?phoneNumber=${phoneNumber}&connectionId=${connectionId}&startDate=${startDate}&endDate=${endDate}`;
+      const url = `https://finzlyapp-production.up.railway.app/api/invoices/generate?phoneNumber=${phoneNumber}&connectionId=${connectionId}&startDate=${startDate}&endDate=${endDate}`;
       
       this.http.post(url, {}, { responseType: 'blob' })
         .subscribe(
