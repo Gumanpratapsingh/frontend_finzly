@@ -83,7 +83,7 @@ export class PaymentTranscationTrackingComponent implements OnInit {
       status: 'PENDING'
     };
 
-    this.http.post<Transaction>('https://frontendfinzly-production.up.railway.app/api/transactions', payment)
+    this.http.post<Transaction>('https://finzlyapp-production.up.railway.app//api/transactions', payment)
       .subscribe(
         (response) => {
           console.log('Payment processed successfully');

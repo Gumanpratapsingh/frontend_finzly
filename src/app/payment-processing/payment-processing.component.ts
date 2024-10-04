@@ -121,7 +121,7 @@ export class PaymentProcessingComponent implements OnInit {
     };
 
     this.isLoading = true;
-    this.http.post<{ message: string, updatedInvoice: Invoice }>('https://frontendfinzly-production.up.railway.app/api/payments/process', paymentData)
+    this.http.post<{ message: string, updatedInvoice: Invoice }>('https://finzlyapp-production.up.railway.app//api/payments/process', paymentData)
       .subscribe(
         (response) => {
           this.showSuccessMessage = true;
@@ -152,7 +152,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`https://frontendfinzly-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app//api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;

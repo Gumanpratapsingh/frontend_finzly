@@ -37,7 +37,7 @@ export class TransactionHistoryComponent implements OnInit {
     this.error = null;
     this.transactions = [];
 
-    this.http.get<Transaction[]>(`https://frontendfinzly-production.up.railway.app/api/transactions/history/${this.phoneNumber}`)
+    this.http.get<Transaction[]>(`https://finzlyapp-production.up.railway.app/api/transactions/history/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.transactions = data;
