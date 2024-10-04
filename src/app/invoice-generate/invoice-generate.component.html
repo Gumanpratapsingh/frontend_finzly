@@ -16,8 +16,14 @@
     </div>
 
     <form *ngIf="showDateForm" [formGroup]="dateForm" (ngSubmit)="generateInvoice()">
-      <input type="date" formControlName="startDate">
-      <input type="date" formControlName="endDate">
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input id="startDate" type="date" formControlName="startDate" placeholder="Start Date">
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input id="endDate" type="date" formControlName="endDate" placeholder="End Date">
+      </div>
       <button type="submit" [disabled]="dateForm.invalid || !connectionForm.valid">Generate Invoice</button>
     </form>
 
