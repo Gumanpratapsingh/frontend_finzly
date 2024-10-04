@@ -46,7 +46,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<string[]>(`http://localhost:8080/api/customers/connection-ids/${this.phoneNumber}`)
+    this.http.get<string[]>(`https://finzlyapp-production.up.railway.app/api/customers/connection-ids/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.connectionIds = data;
@@ -74,7 +74,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;
@@ -121,7 +121,7 @@ export class PaymentProcessingComponent implements OnInit {
     };
 
     this.isLoading = true;
-    this.http.post<{ message: string, updatedInvoice: Invoice }>('http://localhost:8080/api/payments/process', paymentData)
+    this.http.post<{ message: string, updatedInvoice: Invoice }>('https://finzlyapp-production.up.railway.app/api/payments/process', paymentData)
       .subscribe(
         (response) => {
           this.showSuccessMessage = true;
@@ -152,7 +152,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;
