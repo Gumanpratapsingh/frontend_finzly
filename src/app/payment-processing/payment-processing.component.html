@@ -4,7 +4,7 @@
   <div class="search-form">
     <input [(ngModel)]="phoneNumber" placeholder="Enter Phone Number">
     
-    <button (click)="fetchConnectionIds()">Fetch Connection IDs</button>
+    <button type="submit" (click)="fetchConnectionIds()">Fetch Connection IDs</button>
   </div>
 
   <div class="connection-list" *ngIf="connectionIds.length > 0">

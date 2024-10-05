@@ -38,7 +38,7 @@ export class PaymentTranscationTrackingComponent implements OnInit {
   }
 
   loadTransactions(consumerId: number) {
-    this.http.get<Transaction[]>(`http://localhost:8080/api/transactions/${consumerId}`)
+    this.http.get<Transaction[]>(`https://finzlyapp-production.up.railway.app/api/transactions/${consumerId}`)
       .subscribe(
         (data) => {
           this.transactions = data;
@@ -57,7 +57,7 @@ export class PaymentTranscationTrackingComponent implements OnInit {
 
     this.isLoading = true;
     this.errorMessage = '';
-    this.http.get<Transaction[]>(`http://localhost:8080/api/transactions/history/${this.phoneNumber}`)
+    this.http.get<Transaction[]>(`https://finzlyapp-production.up.railway.app/api/transactions/history/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.transactions = data;
@@ -83,7 +83,7 @@ export class PaymentTranscationTrackingComponent implements OnInit {
       status: 'PENDING'
     };
 
-    this.http.post<Transaction>('http://localhost:8080/api/transactions', payment)
+    this.http.post<Transaction>('https://finzlyapp-production.up.railway.app/api/transactions', payment)
       .subscribe(
         (response) => {
           console.log('Payment processed successfully');
