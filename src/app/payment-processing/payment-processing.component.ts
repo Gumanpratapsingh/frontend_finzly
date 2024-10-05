@@ -35,6 +35,11 @@ export class PaymentProcessingComponent implements OnInit {
   isLoading: boolean = false;
   showSuccessMessage: boolean = false;
   successMessage: string = '';
+  earlyPaymentDiscount: number = 0;
+  onlinePaymentDiscount: number = 0;
+  finalAmount: number = 0;
+  isEarlyPayment: boolean = false;
+  isOnlinePayment: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -46,7 +51,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<string[]>(`https://finzlyapp-production.up.railway.app/api/customers/connection-ids/${this.phoneNumber}`)
+    this.http.get<string[]>(`http://localhost:8080/api/customers/connection-ids/${this.phoneNumber}`)
       .subscribe(
         (data) => {
           this.connectionIds = data;
@@ -74,7 +79,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;
@@ -94,6 +99,38 @@ export class PaymentProcessingComponent implements OnInit {
   selectInvoice(invoice: Invoice) {
     this.selectedInvoice = invoice;
     this.paymentAmount = invoice.amountDue;
+    
+    // Check for early payment discount
+    const currentDate = new Date();
+    const dueDate = new Date(invoice.billDueDate);
+    this.isEarlyPayment = currentDate < dueDate;
+    
+    if (this.isEarlyPayment) {
+      // Assuming 5% early payment discount
+      this.earlyPaymentDiscount = invoice.amountDue * 0.05;
+    } else {
+      this.earlyPaymentDiscount = 0;
+    }
+    
+    this.calculateFinalAmount();
+  }
+
+  calculateFinalAmount() {
+    if (!this.selectedInvoice) return;
+
+    let discountedAmount = this.selectedInvoice.amountDue ;
+    
+    this.isOnlinePayment = this.paymentMethod !== 'CASH';
+    
+    if (this.isOnlinePayment) {
+      // Assuming 5s% online payment discount
+      this.onlinePaymentDiscount = discountedAmount * 0.05;
+    } else {
+      this.onlinePaymentDiscount = 0;
+    }
+    
+    this.finalAmount = discountedAmount - this.onlinePaymentDiscount- this.earlyPaymentDiscount;
+    this.paymentAmount = this.finalAmount;
   }
 
   processPayment() {
@@ -115,13 +152,13 @@ export class PaymentProcessingComponent implements OnInit {
 
     const paymentData = {
       invoiceId: this.selectedInvoice.invoiceId,
-      amount: this.paymentAmount,
+      amount: this.finalAmount,
       paymentMethod: this.paymentMethod,
       connectionId: this.selectedConnectionId
     };
 
     this.isLoading = true;
-    this.http.post<{ message: string, updatedInvoice: Invoice }>('https://finzlyapp-production.up.railway.app/api/payments/process', paymentData)
+    this.http.post<{ message: string, updatedInvoice: Invoice }>('http://localhost:8080/api/payments/process', paymentData)
       .subscribe(
         (response) => {
           this.showSuccessMessage = true;
@@ -152,7 +189,7 @@ export class PaymentProcessingComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.http.get<Invoice[]>(`https://finzlyapp-production.up.railway.app/api/invoices/unpaid/${this.selectedConnectionId}`)
+    this.http.get<Invoice[]>(`http://localhost:8080/api/invoices/unpaid/${this.selectedConnectionId}`)
       .subscribe(
         (data) => {
           this.invoices = data;

@@ -27,15 +27,19 @@
   <div class="payment-form" *ngIf="selectedInvoice">
     <h3>Process Payment</h3>
     <p>Selected Invoice: #{{ selectedInvoice.invoiceId }}</p>
-    <p>Amount Due: {{ selectedInvoice.amountDue | currency:'INR':'symbol':'1.2-2' }}</p>
-    <input [(ngModel)]="paymentAmount" type="number" placeholder="Payment Amount">
-    <select [(ngModel)]="paymentMethod">
-      <option value="CREDIT_CARD">Credit Card</option>
-      <option value="DEBIT_CARD">Debit Card</option>
-      <option value="NET_BANKING">Net Banking</option>
-      <option value="UPI">UPI</option>
-      <option value="CASH">Cash</option>
-    </select>
+    <p>Original Amount Due: {{ selectedInvoice.amountDue | currency:'INR':'symbol':'1.2-2' }}</p>
+    <p *ngIf="isEarlyPayment">Early Payment Discount: {{ earlyPaymentDiscount | currency:'INR':'symbol':'1.2-2' }}</p>
+    <p>Payment Method:
+      <select [(ngModel)]="paymentMethod" (change)="calculateFinalAmount()">
+        <option value="CREDIT_CARD">Credit Card</option>
+        <option value="DEBIT_CARD">Debit Card</option>
+        <option value="NET_BANKING">Net Banking</option>
+        <option value="UPI">UPI</option>
+        <option value="CASH">Cash</option>
+      </select>
+    </p>
+    <p *ngIf="paymentMethod !== 'CASH'">Online Payment Discount: {{ onlinePaymentDiscount | currency:'INR':'symbol':'1.2-2' }}</p>
+    <p><strong>Final Amount to Pay: {{ finalAmount | currency:'INR':'symbol':'1.2-2' }}</strong></p>
     <button (click)="processPayment()">Process Payment</button>
   </div>
 

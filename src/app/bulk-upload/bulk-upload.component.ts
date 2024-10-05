@@ -67,7 +67,7 @@ export class BulkUploadComponent {
 
     this.isLoading = true; // Show loading indicator
 
-    this.http.post('https://finzlyapp-production.up.railway.app/api/bulk-upload/customers', formData, {
+    this.http.post('http://localhost:8080/api/bulk-upload/customers', formData, {
       headers: { 'Authorization': `Bearer ${token}` },
       reportProgress: true,
       observe: 'events'
